@@ -1,6 +1,6 @@
 package main
 
-import "github.com/kaziwaseef/stkr/cmd"
+import "github.com/kaziwaseef/stacker/cmd"
 
 func main() {
 	cmd.Execute()

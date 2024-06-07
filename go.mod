@@ -1,4 +1,4 @@
-module github.com/kaziwaseef/stkr
+module github.com/kaziwaseef/stacker
 
 go 1.22.4
 
