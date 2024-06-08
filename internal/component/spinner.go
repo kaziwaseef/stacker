@@ -20,7 +20,7 @@ func SpinnerComponent[T interface{}](ctx context.Context, fn func(ctx context.Co
 	m := Spinnermodel[T]{
 		ctx:         ctx,
 		fn:          fn,
-		spinnerType: spinner.Dot,
+		spinnerType: spinner.Points,
 		spinnerText: spinnerText,
 	}
 	m.resetSpinner()
