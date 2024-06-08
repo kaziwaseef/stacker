@@ -53,7 +53,6 @@ type DoctorPageModel struct {
 }
 
 func checkDependencies(ctx context.Context) *DoctorPageModel {
-	// time.Sleep(2 * time.Second)
 	isGitExits := util.GitExits(ctx)
 	isGithubExits := util.GithubExits(ctx)
 	isGitlabExits := util.GitlabExits(ctx)

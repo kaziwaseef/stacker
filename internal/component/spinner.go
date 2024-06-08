@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
@@ -19,10 +18,6 @@ func SpinnerComponent[T interface{}](ctx context.Context, fn func(ctx context.Co
 	m.resetSpinner()
 
 	p := tea.NewProgram(m)
-	go func() {
-		time.Sleep(250 * time.Millisecond)
-		p.Send(m.spinner.Tick())
-	}()
 	model, err := p.Run()
 
 	if err != nil {
@@ -42,13 +37,11 @@ type spinnermodel[T interface{}] struct {
 	quitting    bool
 }
 
-type statusMsg interface{}
-
 func (m spinnermodel[T]) Init() tea.Cmd {
-	return func() tea.Msg {
+	return tea.Batch(func() tea.Msg {
 		value := m.fn(m.ctx)
-		return statusMsg(value)
-	}
+		return value
+	}, m.spinner.Tick)
 }
 
 func (m spinnermodel[T]) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
