@@ -17,14 +17,14 @@ func Logger(ctx context.Context) *logger {
 
 func (l *logger) Log(value string) {
 	v := l.ctx.Value(types.Verbose)
-	if v != nil && v.(bool) {
+	if val, ok := v.(bool); ok && val {
 		log.Println(value)
 	}
 }
 
 func (l *logger) Fatal(value string) {
 	v := l.ctx.Value("verbose")
-	if v != nil && v.(bool) {
+	if val, ok := v.(bool); ok && val {
 		log.Fatalf(value)
 	}
 }
