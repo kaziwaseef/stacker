@@ -10,7 +10,7 @@ import (
 	"github.com/kaziwaseef/stacker/internal/util"
 )
 
-func SpinnerComponent[T interface{}](ctx context.Context, fn func(ctx context.Context) *T) Spinnermodel[T] {
+func SpinnerComponent[T interface{}](ctx context.Context, fn func(ctx context.Context) *T, spinnerText string) Spinnermodel[T] {
 	if util.IsVerbose(ctx) {
 		return Spinnermodel[T]{
 			ctx:  ctx,
@@ -21,6 +21,7 @@ func SpinnerComponent[T interface{}](ctx context.Context, fn func(ctx context.Co
 		ctx:         ctx,
 		fn:          fn,
 		spinnerType: spinner.Dot,
+		spinnerText: spinnerText,
 	}
 	m.resetSpinner()
 
@@ -41,6 +42,7 @@ type Spinnermodel[T interface{}] struct {
 	Data        *T
 	spinnerType spinner.Spinner
 	spinner     spinner.Model
+	spinnerText string
 	quitting    bool
 }
 
@@ -84,6 +86,6 @@ func (m Spinnermodel[T]) View() string {
 	if m.quitting {
 		return ""
 	}
-	s := fmt.Sprintf("\n %s%s%s\n\n", m.spinner.View(), " ", textStyle("Loading..."))
+	s := fmt.Sprintf("\n %s%s%s\n\n", m.spinner.View(), " ", textStyle(m.spinnerText))
 	return s
 }

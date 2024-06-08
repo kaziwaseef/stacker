@@ -16,7 +16,7 @@ func DoctorPage(ctx context.Context) {
 	var model component.Spinnermodel[DoctorPageModel]
 
 	if !verbose {
-		model = component.SpinnerComponent(ctx, checkDependencies)
+		model = component.SpinnerComponent(ctx, checkDependencies, "Checking Dependencies...")
 	} else {
 		model.Data = checkDependencies(ctx)
 	}
