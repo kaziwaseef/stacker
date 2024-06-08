@@ -7,10 +7,17 @@ import (
 
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/kaziwaseef/stacker/internal/util"
 )
 
-func SpinnerComponent[T interface{}](ctx context.Context, fn func(ctx context.Context) *T) spinnermodel[T] {
-	m := spinnermodel[T]{
+func SpinnerComponent[T interface{}](ctx context.Context, fn func(ctx context.Context) *T) Spinnermodel[T] {
+	if util.IsVerbose(ctx) {
+		return Spinnermodel[T]{
+			ctx:  ctx,
+			Data: fn(ctx),
+		}
+	}
+	m := Spinnermodel[T]{
 		ctx:         ctx,
 		fn:          fn,
 		spinnerType: spinner.Dot,
@@ -25,10 +32,10 @@ func SpinnerComponent[T interface{}](ctx context.Context, fn func(ctx context.Co
 		os.Exit(1)
 	}
 
-	return model.(spinnermodel[T])
+	return model.(Spinnermodel[T])
 }
 
-type spinnermodel[T interface{}] struct {
+type Spinnermodel[T interface{}] struct {
 	ctx         context.Context
 	fn          func(context.Context) *T
 	Data        *T
@@ -37,14 +44,14 @@ type spinnermodel[T interface{}] struct {
 	quitting    bool
 }
 
-func (m spinnermodel[T]) Init() tea.Cmd {
+func (m Spinnermodel[T]) Init() tea.Cmd {
 	return tea.Batch(func() tea.Msg {
 		value := m.fn(m.ctx)
 		return value
 	}, m.spinner.Tick)
 }
 
-func (m spinnermodel[T]) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Spinnermodel[T]) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -67,13 +74,13 @@ func (m spinnermodel[T]) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 }
 
-func (m *spinnermodel[T]) resetSpinner() {
+func (m *Spinnermodel[T]) resetSpinner() {
 	m.spinner = spinner.New()
 	m.spinner.Style = spinnerStyle
 	m.spinner.Spinner = m.spinnerType
 }
 
-func (m spinnermodel[T]) View() string {
+func (m Spinnermodel[T]) View() string {
 	if m.quitting {
 		return ""
 	}

@@ -3,8 +3,6 @@ package util
 import (
 	"context"
 	"log"
-
-	"github.com/kaziwaseef/stacker/internal/types"
 )
 
 type logger struct {
@@ -16,15 +14,13 @@ func Logger(ctx context.Context) *logger {
 }
 
 func (l *logger) Log(value string) {
-	v := l.ctx.Value(types.Verbose)
-	if val, ok := v.(bool); ok && val {
+	if IsVerbose(l.ctx) {
 		log.Println(value)
 	}
 }
 
 func (l *logger) Fatal(value string) {
-	v := l.ctx.Value("verbose")
-	if val, ok := v.(bool); ok && val {
+	if IsVerbose(l.ctx) {
 		log.Fatalf(value)
 	}
 }

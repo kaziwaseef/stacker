@@ -6,6 +6,7 @@ import (
 )
 
 func GitExits(ctx context.Context) bool {
+	Logger(ctx).Log("Running \"git --version\"")
 	cmd := exec.Command("git", "--version")
 	stdout, err := cmd.Output()
 	Logger(ctx).Log(string(stdout))
@@ -13,6 +14,7 @@ func GitExits(ctx context.Context) bool {
 }
 
 func GithubExits(ctx context.Context) bool {
+	Logger(ctx).Log("Running \"gh --version\"")
 	cmd := exec.Command("gh", "--version")
 	stdout, err := cmd.Output()
 	Logger(ctx).Log(string(stdout))
@@ -20,6 +22,7 @@ func GithubExits(ctx context.Context) bool {
 }
 
 func GitlabExits(ctx context.Context) bool {
+	Logger(ctx).Log("Running \"glab --version\"")
 	cmd := exec.Command("glab", "--version")
 	stdout, err := cmd.Output()
 	Logger(ctx).Log(string(stdout))

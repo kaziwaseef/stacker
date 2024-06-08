@@ -4,11 +4,23 @@ import (
 	"context"
 
 	"github.com/kaziwaseef/stacker/internal/component"
+	"github.com/kaziwaseef/stacker/internal/types"
 	"github.com/kaziwaseef/stacker/internal/util"
 )
 
 func DoctorPage(ctx context.Context) {
-	model := component.SpinnerComponent(ctx, checkDependencies)
+	v := ctx.Value(types.Verbose)
+	val, ok := v.(bool)
+	verbose := ok && val
+
+	var model component.Spinnermodel[DoctorPageModel]
+
+	if !verbose {
+		model = component.SpinnerComponent(ctx, checkDependencies)
+	} else {
+		model.Data = checkDependencies(ctx)
+	}
+
 	if model.Data == nil {
 		return
 	}
